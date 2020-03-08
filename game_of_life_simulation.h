@@ -18,7 +18,7 @@ using namespace std;
 class GameOfLifeSimulation{
 	
 	public:
-		GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*), kOutputMode ouput);
+		GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*&), kOutputMode ouput);
 		~GameOfLifeSimulation();
 
 		void Simulate();
@@ -30,7 +30,7 @@ class GameOfLifeSimulation{
 		
 		int generation;	
 		Screen *bacteriaScreen;
-		void (*boundaryLogic)(Screen*);
+		void (*boundaryLogic)(Screen*&);
 		kOutputMode output;
 				
 

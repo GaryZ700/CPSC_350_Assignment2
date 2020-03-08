@@ -10,7 +10,7 @@
 
 using namespace std;
 
-GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*), kOutputMode output){
+GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*&), kOutputMode output){
 
 	this->generation = 0;
 
@@ -34,10 +34,11 @@ GameOfLifeSimulation::~GameOfLifeSimulation(){
 void GameOfLifeSimulation::Simulate(){
 	
 	while(!IsStable()){
-	
+		cout << "Is Not Stable " << endl;	
 		OutputData();
 		boundaryLogic(bacteriaScreen);	
-		++generation;					
+		++generation;		
+		cout << bacteriaScreen->ToString() << endl;			
 	}
 }
 
@@ -47,12 +48,15 @@ void GameOfLifeSimulation::Simulate(){
 void GameOfLifeSimulation::OutputData(){
 
 	//print out the current generation to the screen
+	cout << "Building Output String" << endl;
 	string outputString = "";
 	outputString += "Generation: " + to_string(generation) + "\n\n";
 	outputString +=  bacteriaScreen->ToString() + "\n\n";
+	cout << "Output String Construction Completed" << endl;
 
 	switch(output){
 		case STANDARD:
+			cout << "Standard Output" << endl;
 			cout << outputString;
 			OSMethods::Sleep(kPauseTime);
 			break;
@@ -61,6 +65,7 @@ void GameOfLifeSimulation::OutputData(){
 		case FILEOUT:
 			break;
 	}
+	cout << "Switch Complete" << endl;
 }
 
 //---------------------------------------------------------------------------------

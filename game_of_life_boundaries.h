@@ -17,15 +17,15 @@ using namespace std;
 class GameOfLifeBoundaries{
 
 	public:
-		static void ClassicBoundary(Screen *screen);
-		static void MirrorBoundary(Screen *screen);
-		static void DoughnutBoundary(Screen *screen);
+		static void ClassicBoundary(Screen *&screen);
+		static void MirrorBoundary(Screen *&screen);
+		static void DoughnutBoundary(Screen *&screen);
 	private:
 		static void InnerLogic(Screen *screen, Screen *newScreen, const Vector2D &position);
 		static void ClassicBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position);	
 		static void MirrorBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position);
 		static void DoughnutBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position);
-		static void BuildNextGeneration(Screen *screen, void (*boundaryLogic)(Screen*, Screen*, const Vector2D&));
+		static void BuildNextGeneration(Screen *&screen, void (*boundaryLogic)(Screen*, Screen*, const Vector2D&));
 };
 
 #endif

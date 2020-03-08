@@ -26,6 +26,8 @@ class Screen{
 		~Screen();
 		
 		void Update(string data);
+		void SetPixel(char pixel, int x, int y);
+		void SetPixel(char pixel, const Vector2D &vector);
 		char GetPixel(int x, int y);
 		char GetPixel(const Vector2D &vector);
 		string ToString();

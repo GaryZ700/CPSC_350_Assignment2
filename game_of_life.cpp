@@ -37,7 +37,7 @@ void GameOfLife::MainMenu(){
 
 	kOutputMode mode;
 	Screen* initialConfiguration; 	
-	void (*boundaryFunction)(Screen*);
+	void (*boundaryFunction)(Screen*&);
 
 	mainMenu.Display();
 	string answer = mainMenu.ParseOption();

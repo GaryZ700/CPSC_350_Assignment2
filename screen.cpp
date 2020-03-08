@@ -113,6 +113,24 @@ void Screen::Update(string data){
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//SetPixel Function, sets the pixel at the specified location with the provided char
+//pixel: char that is to be input into the screen
+//x: int that represents the x position of the pixel
+//y: int that represents the y position of the pixel
+void Screen::SetPixel(char pixel, int x, int y){
+	SetPixel(pixel, Vector2D(x, y));
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//Overloaded SetPixel Function, sets the pixel at the specified location with the provided char
+//pixel: char that is to be input into the screen
+//position: reference to a constant vector that represents the position where the pixel is to be inserted
+void Screen::SetPixel(char pixel, const Vector2D &vector){
+	screenArray[int(vector.x)][int(vector.y)] = pixel;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 //GetPixel Function
 //x, int x position of the pixel to get
 //y, int y position of the pixel to get

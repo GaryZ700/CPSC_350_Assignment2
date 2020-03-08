@@ -14,7 +14,7 @@ using namespace std;
 
 //DoughnutBoundary Function to set up the Classic Boundary Logic
 //screen: pointer to the starting bacteria generation
-void GameOfLifeBoundaries::ClassicBoundary(Screen *screen){
+void GameOfLifeBoundaries::ClassicBoundary(Screen *&screen){
 	BuildNextGeneration(screen, ClassicBoundaryLogic);
 }
 
@@ -22,7 +22,7 @@ void GameOfLifeBoundaries::ClassicBoundary(Screen *screen){
 
 //DoughnutBoundary Function to set up the Mirror Boundary Logic
 //screen: pointer to the starting bacteria generation
-void GameOfLifeBoundaries::MirrorBoundary(Screen *screen){
+void GameOfLifeBoundaries::MirrorBoundary(Screen *&screen){
 	BuildNextGeneration(screen, MirrorBoundaryLogic);
 }
 
@@ -30,7 +30,7 @@ void GameOfLifeBoundaries::MirrorBoundary(Screen *screen){
 
 //DoughnutBoundary Function to set up the Doughnut Boundary Logic
 //screen: pointer to the starting bacteria generation
-void GameOfLifeBoundaries::DoughnutBoundary(Screen *screen){
+void GameOfLifeBoundaries::DoughnutBoundary(Screen *&screen){
 	BuildNextGeneration(screen, DoughnutBoundaryLogic);
 }
 
@@ -41,7 +41,34 @@ void GameOfLifeBoundaries::DoughnutBoundary(Screen *screen){
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
+
+	cout << "INNER LOGICLOGIC LOGIC" << endl;
+	cout << screen->ToString() << endl;
+	cout << position.ToString() << endl << endl;
+	int neighbors = 0;
 	
+	for(int y=-1; y<2; ++y){
+		for(int x=-1; x<2; ++x){
+
+			Vector2D offset(x, y);
+			
+			if(offset == Vector2D::kZero)
+				continue;
+			cout << offset.ToString() << endl;
+			
+			if(screen->GetPixel(position + offset) == 'X')	
+				++neighbors;
+		}
+	}
+
+	//core logic for game of life simulation
+	if(neighbors <= 1 || neighbors > 3)
+		newScreen->SetPixel('-', position);
+	else if(neighbors == 3)
+		newScreen->SetPixel('X', position);
+	cout << "NEIGHTBORS!!!!!!!!!!!!" << endl;
+	cout << neighbors << endl;
+	cout << "!!!!!!!!!!!!!!!" << endl;
 }
 
 //---------------------------------------------------------------------------------
@@ -51,7 +78,7 @@ void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const V
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
-	
+	cout << "CLASSSIC BOUNDARY" << endl;
 }
 
 //---------------------------------------------------------------------------------
@@ -79,20 +106,24 @@ void GameOfLifeBoundaries::DoughnutBoundaryLogic(Screen *screen, Screen *newScre
 //Builds the Next Generation of Bacteria based upon the Boundary Logic
 //screen: pointer to a Screen object containing the starting bacteria generation
 //boundaryLogic: pointer to a function that will take the starting bacteria genration screen pointer, the next bacteria genration screen pointer and a Vector2D constant reference of the bacteria to update
-void GameOfLifeBoundaries::BuildNextGeneration(Screen *screen, void (*boundaryLogic)(Screen*, Screen*, const Vector2D&)){
+void GameOfLifeBoundaries::BuildNextGeneration(Screen *&screen, void (*boundaryLogic)(Screen*, Screen*, const Vector2D&)){
 
-	int area = screen->GetSize().x * screen->GetSize().y;
-	Vector2D position;
-	Screen *newScreen = new Screen(screen->GetSize());
+	Vector2D size = screen->GetSize();
+	Screen *newScreen = new Screen(size);
 	
-	for(int location=0; location<area; ++location){
+	for(int y=0; y<screen->GetSize().y; ++y){
+		for(int x=0; x<screen->GetSize().x; ++x){
 
-		//check whether or not boundary or inner logic should be used
-		if(position.x == 0 || position.y == 0)
-			boundaryLogic(screen, newScreen, position);
-		else
-			InnerLogic(screen, newScreen, position);
-		
-		++position;	
+			//check whether or not boundary or inner logic should be used
+			if(x == 0 || y == 0 || x == size.x-1 || y == size.y-1)
+				boundaryLogic(screen, newScreen, Vector2D(x, y));
+			else
+				InnerLogic(screen, newScreen, Vector2D(x, y));	
+		}
 	}
+
+	cout << "Built New Generation )))))))))))))))))))))))" << endl;
+//	cout << newScreen->ToString() << endl << endl;
+	delete screen;
+	screen = newScreen;
 }

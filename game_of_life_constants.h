@@ -37,6 +37,6 @@ const string kLoadFileBadChar = "Bad File Data! Please ensure that the file cons
 //Constants Related Towards the Simulation Portion of the Game of Life
 enum kOutputMode {STANDARD, PAUSE, FILEOUT};
 const int kStabilityCycleMax = 20;
-const int kPauseTime = 200;
+const int kPauseTime = 500;
 
 #endif
