@@ -1,0 +1,25 @@
+/*Identifiying Information:
+	a. Gary Zeri
+	b. Student ID: 2321569
+	c. zeri@chapman.edu
+	d. CPSC 350-02
+	e. Assignment 2: Game of Life
+*/
+
+#ifndef _GAME_OF_LIFE_BOUNDARIES_H_
+#define _GAME_OF_LIFE_BOUNDARIES_H_
+
+#include "screen.h"
+
+using namespace std;
+
+//Namespace for storing all game of life boundary functions and constants
+namespace game_of_life_boundaries{
+
+	
+	typedef BoundaryFunction Screen
+
+
+};
+
+#endif
