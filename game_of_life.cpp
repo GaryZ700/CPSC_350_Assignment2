@@ -66,7 +66,7 @@ void GameOfLife::MainMenu(){
 		mode = PAUSE;
 	else
 		mode = FILEOUT; 
-	
+
 	cout << "MODE: " << mode << endl;
 	cout << "TEST MODE: " << STANDARD << endl;
 

@@ -6,6 +6,7 @@
 	e. Assignment 2: Game of Life
 */
 
+#include <fstream>
 #include <vector>
 #include "user_input.h"
 #include "screen.h"
@@ -29,6 +30,8 @@ class GameOfLifeSimulation{
 		bool IsStable();
 		
 		int generation;	
+		int fileGeneration;
+		fstream outputFile;
 		Screen *bacteriaScreen;
 		void (*boundaryLogic)(Screen*&);
 		kOutputMode output;

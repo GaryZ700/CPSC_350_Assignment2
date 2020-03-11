@@ -19,13 +19,29 @@ GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundar
 
 	this->history = new vector<string>();
 	this->history->clear();
+
+	if(output == FILEOUT){
+
+		string fileName;
+		cout << kOutputFileName << endl;
+		getline(cin, fileName);
+		
+		this->outputFile.open(fileName, ios::out);	
+		
+		cout << kFileOutputGenerations << endl;
+		cin >> fileGeneration;
+	}
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 GameOfLifeSimulation::~GameOfLifeSimulation(){
+
 	delete history;
 	delete bacteriaScreen;	
+	
+	if(output == FILEOUT)
+		this->outputFile.close();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -60,7 +76,13 @@ void GameOfLifeSimulation::OutputData(){
 			input.Pause();		
 			break;
 		case FILEOUT:
-			break;
+			if(outputFile.is_open()){
+		        	outputFile << outputString;
+				cout << "Wrote to File" << endl;
+			}	
+			else
+				cout << "Warning File is not open" << endl;
+			break;	
 	}
 }
 
@@ -72,7 +94,11 @@ bool GameOfLifeSimulation::IsStable(){
 	int size = history->size() - 1;
 	
 	//check if all cells have died
-	if(history->at(size).find('X') == string::npos)
+	//and if the file output mode is selected, that the max amount of outputted generations has 
+	//not been crossed
+	if(history->at(size).find('X') == string::npos ||
+	   (output == FILEOUT && generation > fileGeneration)
+	)
 		return true;
 
 	//check whether the current history shows any stabilizationd

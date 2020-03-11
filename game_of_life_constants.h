@@ -38,5 +38,7 @@ const string kLoadFileBadChar = "Bad File Data! Please ensure that the file cons
 enum kOutputMode {STANDARD, PAUSE, FILEOUT};
 const int kStabilityCycleMax = 20;
 const int kPauseTime = 500;
+const string kOutputFileName = "Please enter a name for the output file.\nWarning!! If the file has other data, it will be overwritten with outupt from this program!";
+const string kFileOutputGenerations = "Please enter the maximum amount of generations that should be outputted to the output file.\nPlease note that if the system stabilizes before the maximum amount of generations have been reached then file output will cease.";
 
 #endif

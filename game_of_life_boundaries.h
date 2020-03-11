@@ -30,6 +30,7 @@ class GameOfLifeBoundaries{
 		static void CoreLogic(Screen *screen, Screen *newScreen, const Vector2D &position, int neighbors);
 		static Vector2D* ClassicOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet);
 		static Vector2D* DoughnutOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet);
+		static Vector2D* MirrorOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet);
 };
 
 #endif

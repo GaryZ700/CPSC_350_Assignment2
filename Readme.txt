@@ -6,19 +6,29 @@ Identifiying Information:
 	e. Assignment 2: Game of Life
 
 2. List of Source Files
-	1.  assignment1_constants.h
-	2.  dna_analyzer.h
-	3.  dna_data.h
-	4.  helpful_methods.h
-	5.  user_input.h
-	6.  dna_analyzer.cpp
-	7.  dna_data.cpp
-	8.  helpful_methods.cpp
-	9.  user_input.cpp
-	10. main.cpp 
+	1.  Makefile
+	2.  game_of_life_constants.h
+	3.  game_of_life.h
+	4.  game_of_life_boundaries.h 
+	5.  game_of_life_simulation.h
+	6.  menu.h
+	7.  os_methods.h
+	8.  screen.h
+	9.  user_input.h
+	10. vector2d.h
+	11. game_of_life.cpp
+	12. game_of_life_boundaries.cpp
+	13. game_of_life_simulation.cpp
+	14. menu.cpp
+	15. os_methods.cpp
+	16. screen.cpp
+	17. user_input.cpp
+	18. vector2d.cpp 
 
 3. Description of any known compile/runtime errors:
-	Software will mistakenly not be able to identify stable Game of Life patterns if they require 200 or more cycles before the cycle repeats. 
+	Software will mistakenly not be able to identify stable Game of Life patterns if they require 50 or more cycles before the cycle repeats. 
+	Testing was completed to the best abillities and knowledge of the programmer, but run-time errors may exist in certain input situations that were not tested. 
+	During file reading/writing, hardware failure or other multiple software reading/writing to the same file may cause program to crash.	
 
 4. References used to complete the assignment:
 	Class Lectures/Textbook
@@ -56,4 +66,4 @@ Identifiying Information:
 
 5. Instructions for running the assignment
 	1.) Run "make"
-	2.) Run "./assignment0" with a command line paramter of the DNA file to analyze.
+	2.) Run "./assignment2.exe" with a command line paramter of the DNA file to analyze.

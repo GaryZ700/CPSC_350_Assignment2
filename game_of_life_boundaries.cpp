@@ -54,10 +54,14 @@ void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const V
 			
 			Vector2D *offSetPosition = getOffSetPosition(size, position, Vector2D(x, y));
 
+			cout << "Get Pixel" << endl;
+			cout << offSetPosition->ToString() << endl;
 			if(screen->GetPixel(offSetPosition) == 'X')	
 				++neighbors;
 			
+			cout << "Before Delete" << endl;
 			delete offSetPosition;
+			cout << "After Delete" << endl;
 		}
 	}
 
@@ -134,7 +138,7 @@ void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScree
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::MirrorBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
-		
+	InnerLogic(screen, newScreen, position, MirrorOffSetPosition);		
 }
 
 //---------------------------------------------------------------------------------
@@ -221,3 +225,36 @@ Vector2D* GameOfLifeBoundaries::DoughnutOffSetPosition(const Vector2D &screenSiz
 	
 	return offSetPosition;	
 }
+
+//---------------------------------------------------------------------------------
+
+Vector2D* GameOfLifeBoundaries::MirrorOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet){
+
+	cout << position.ToString() << endl;
+	cout << "Enter Mirror Off Set Position" << endl;
+	
+	Vector2D offSetPosition(position + offSet); 
+	cout << offSetPosition.ToString() << endl;	
+
+	if(offSetPosition.x < 0 || offSetPosition.x > screenSize.x - 1){
+		cout << "X Entrance" << endl;
+		return new Vector2D(
+			offSetPosition.x - offSet.x, 
+			offSetPosition.y
+		);
+	}
+
+	else if(offSetPosition.y < 0 || offSetPosition.y > screenSize.y - 1){
+		cout << "Y Entrance" << endl;
+		return new Vector2D(
+			offSetPosition.x, 
+			offSetPosition.y - offSet.y	
+		);
+	}
+	
+	else if(offSetPosition.x == 0 || offSetPosition.x == screenSize.x - 1)
+		return new Vector2D(position);	
+
+	return new Vector2D(offSetPosition);
+
+	}
