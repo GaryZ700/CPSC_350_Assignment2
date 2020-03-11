@@ -5,7 +5,7 @@
 # Assignment 1
 
 #change this to the correct assignment #
-EXECUTABLE := test
+EXECUTABLE := assignment2
 
 # the source files to be built
 SOURCES := *.cpp

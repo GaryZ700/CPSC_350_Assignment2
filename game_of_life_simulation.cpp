@@ -11,14 +11,13 @@
 using namespace std;
 
 GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*&), kOutputMode output){
-
 	this->generation = 0;
 
 	this->bacteriaScreen = configuration;
 	this->boundaryLogic = boundaryLogic;
 	this->output = output;
 
-	this->history = new vector<string>(kStabilityCycleMax * 2);
+	this->history = new vector<string>();
 	this->history->clear();
 }
 
@@ -34,7 +33,6 @@ GameOfLifeSimulation::~GameOfLifeSimulation(){
 void GameOfLifeSimulation::Simulate(){
 	
 	while(!IsStable()){
-		cout << "Is Not Stable " << endl;	
 		OutputData();
 		boundaryLogic(bacteriaScreen);	
 		++generation;		
@@ -48,70 +46,60 @@ void GameOfLifeSimulation::Simulate(){
 void GameOfLifeSimulation::OutputData(){
 
 	//print out the current generation to the screen
-	cout << "Building Output String" << endl;
 	string outputString = "";
 	outputString += "Generation: " + to_string(generation) + "\n\n";
 	outputString +=  bacteriaScreen->ToString() + "\n\n";
-	cout << "Output String Construction Completed" << endl;
 
 	switch(output){
 		case STANDARD:
-			cout << "Standard Output" << endl;
 			cout << outputString;
 			OSMethods::Sleep(kPauseTime);
 			break;
 		case PAUSE:
+			cout << outputString << endl;
+			input.Pause();		
 			break;
 		case FILEOUT:
 			break;
 	}
-	cout << "Switch Complete" << endl;
 }
 
 //---------------------------------------------------------------------------------
 
 bool GameOfLifeSimulation::IsStable(){
 	
-	cout << endl << endl << "Is Stable Function Being Called" << endl;
-
 	history->push_back(bacteriaScreen->ToString());		
+	int size = history->size() - 1;
 	
-	//check whether the current history shows any stabilization
-	if(history->size() == 2*kStabilityCycleMax){
-		int i = 0;
-		while(i<history->size()){
-			
-			//get the pattern of size i
-			for(int j=0; j<=i; ++j){
-				cout << "History Values: " << j << " = " << history->at(j) << endl;
-				if(history->at(j) != history->at( (j*2) + 1 + j )){
-					cout << "If Worked" << endl;
-					goto nextPattern;
-				}
-			}
-			
-			cout << "Return True" << endl;
-			return true;	
+	//check if all cells have died
+	if(history->at(size).find('X') == string::npos)
+		return true;
 
-			nextPattern:
-				++i;
+	//check whether the current history shows any stabilizationd
+	//check if the current history has data that is a multiple of two
+	if(size%2 == 0){
+
+		//check all current possible patterns that are possible to discern from the given data
+		for(int i=0; i<size/2; ++i){	
+			for(int j=1; j<=i; ++j){
+				
+				//get the pattern of size i
+				for(int k=0; k<=j; ++k){
+					if(history->at(size - k) != history->at( size - i - k )){
+						goto nextPattern;
+					}
+				}
+				
+				return true;	
+
+				nextPattern:;
+			}	
 		}
-		
-		cout << "History Cleared" << endl; 
-		history->clear();
+
+		//if the history is full then clear it
+		if(history->size() == 2*kStabilityCycleMax)	
+			history->clear();
 	}
 
-	cout << "False Return " << endl << endl;
 	return false;
-}
-
-//---------------------------------------------------------------------------------
-
-//Cantor Pairing Function is used to take a pair of natural numbers, x and y
-//and compress the data of the two values into a single natural number
-//is a bijection between the set of all pairs of natural numbers and the set of all natural numbers
-int GameOfLifeSimulation::CantorPairingFunction(int x, int y){
-	
-	cout << "Cantor Pairing Function  " << x << "  " << y << endl;  
-	return (0.5 * (x + y) * (x + y + 1)) + y;   
 }

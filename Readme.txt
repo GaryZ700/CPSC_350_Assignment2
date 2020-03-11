@@ -51,6 +51,8 @@ Identifiying Information:
 	https://www.conwaylife.com/wiki/Main-Page
 	https://www.geeksforgeeks.org/increment-and-decrement-operator-overloading-in-c/
 	https://quora.com/How-do-you-pause-the-system-for-a-while-in-C++	
+	https://stackoverflow.com/questions/21257544/c-wait-for-user-input
+	www.cplusplus.com/reference/string/string/find/
 
 5. Instructions for running the assignment
 	1.) Run "make"

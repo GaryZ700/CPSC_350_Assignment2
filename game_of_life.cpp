@@ -246,5 +246,3 @@ Screen* GameOfLife::LoadFile(){
 
 	return new Screen(Vector2D(size[1], size[0]), data);	
 }
-
-//---------------------------------------------------------------------------------

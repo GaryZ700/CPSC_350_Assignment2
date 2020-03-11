@@ -40,35 +40,28 @@ void GameOfLifeBoundaries::DoughnutBoundary(Screen *&screen){
 //screen: pointer to starting generation screen
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
-void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
+//getOffSetPosition: pointer to a function that takes both the current position vector and the offset vector to generate the final offset position
+void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const Vector2D &position, Vector2D* (*getOffSetPosition)(const Vector2D&, const Vector2D&, const Vector2D&)){
 
-	cout << "INNER LOGICLOGIC LOGIC" << endl;
-	cout << screen->ToString() << endl;
-	cout << position.ToString() << endl << endl;
-	int neighbors = 0;
-	
+	int neighbors = 0;	
+	Vector2D size = screen->GetSize();
+
 	for(int y=-1; y<2; ++y){
 		for(int x=-1; x<2; ++x){
 
-			Vector2D offset(x, y);
+			if(x == 0 && y == 0)
+				continue;				
 			
-			if(offset == Vector2D::kZero)
-				continue;
-			cout << offset.ToString() << endl;
-			
-			if(screen->GetPixel(position + offset) == 'X')	
+			Vector2D *offSetPosition = getOffSetPosition(size, position, Vector2D(x, y));
+
+			if(screen->GetPixel(offSetPosition) == 'X')	
 				++neighbors;
+			
+			delete offSetPosition;
 		}
 	}
 
-	//core logic for game of life simulation
-	if(neighbors <= 1 || neighbors > 3)
-		newScreen->SetPixel('-', position);
-	else if(neighbors == 3)
-		newScreen->SetPixel('X', position);
-	cout << "NEIGHTBORS!!!!!!!!!!!!" << endl;
-	cout << neighbors << endl;
-	cout << "!!!!!!!!!!!!!!!" << endl;
+	CoreLogic(screen, newScreen, position, neighbors);
 }
 
 //---------------------------------------------------------------------------------
@@ -78,7 +71,60 @@ void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const V
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
-	cout << "CLASSSIC BOUNDARY" << endl;
+	
+	int neighbors = 0;
+	int offSetIndex = 0;
+	vector<Vector2D> offSets;
+
+	offSets.push_back(Vector2D::kZero);
+
+	//cout << "!!!!!!!!!!!!!" << endl;
+	
+	//add in the appropriate vectors to check all of the surrounding neighbors
+	if(position.x != 0){
+	//	cout << "Left" << endl; 
+		offSets.push_back(Vector2D::kLeft);
+	}
+	if(position.x != screen->GetSize().x-1){
+	//	cout << "Right" << endl;
+		offSets.push_back(Vector2D::kRight);
+	}
+	if(position.y != 0){
+	//	cout << "Down" << endl;
+		offSets.push_back(Vector2D::kDown);
+	}
+	if(position.y != screen->GetSize().y-1){
+	//	cout << "Up" << endl;
+		offSets.push_back(Vector2D::kUp);
+	}
+	
+	cout << position.ToString() << endl;
+
+	for(int i=0; i<offSets.size(); ++i){
+		for(int j=0; j<offSets.size(); ++j){
+			
+			Vector2D offSet(offSets.at(i) + offSets.at(j));
+
+			if(offSet == Vector2D::kZero || abs(offSet.x) == 2 || abs(offSet.y) == 2)
+				continue;
+			if(position == Vector2D(3, 9)){	
+				/*cout << "###########position with off set###########" << endl;	
+				cout << (position + offSet).ToString() << endl;
+				cout << screen->GetPixel(position + offSet) << endl;*/
+			}
+
+			if(screen->GetPixel(position + offSet) == 'X')	
+				neighbors += 1;			
+		}
+	}
+	
+	/*cout << "!!!!!!!!!!!!!" << endl;
+	cout << neighbors << endl;
+	cout << neighbors / 2 << endl;
+	cout << "TESTTESTTEST" << endl;*/
+
+	//divide neighbors by two since for loop overcounts each neighbor twice
+	CoreLogic(screen, newScreen, position, neighbors/2);
 }
 
 //---------------------------------------------------------------------------------
@@ -88,7 +134,7 @@ void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScree
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::MirrorBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
-	
+		
 }
 
 //---------------------------------------------------------------------------------
@@ -98,7 +144,7 @@ void GameOfLifeBoundaries::MirrorBoundaryLogic(Screen *screen, Screen *newScreen
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::DoughnutBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
-	
+	InnerLogic(screen, newScreen, position, DoughnutOffSetPosition);		
 }
 
 //---------------------------------------------------------------------------------
@@ -118,12 +164,60 @@ void GameOfLifeBoundaries::BuildNextGeneration(Screen *&screen, void (*boundaryL
 			if(x == 0 || y == 0 || x == size.x-1 || y == size.y-1)
 				boundaryLogic(screen, newScreen, Vector2D(x, y));
 			else
-				InnerLogic(screen, newScreen, Vector2D(x, y));	
+				InnerLogic(screen, newScreen, Vector2D(x, y), ClassicOffSetPosition);	
 		}
 	}
 
-	cout << "Built New Generation )))))))))))))))))))))))" << endl;
-//	cout << newScreen->ToString() << endl << endl;
 	delete screen;
 	screen = newScreen;
+}
+
+//---------------------------------------------------------------------------------
+
+//Core Logic for the Game of Life Simulation
+//screen: Screen pointer where update is to be made based on the logic
+//position: reference to Vector2D of position where the update is to be made
+//neighbors: int that represents the number of neighbors the cell in question has
+void GameOfLifeBoundaries::CoreLogic(Screen *screen, Screen *newScreen, const Vector2D &position, int neighbors){
+
+	//core logic for game of life simulation
+	if(neighbors <= 1 || neighbors > 3)
+		newScreen->SetPixel('-', position);
+	else if(neighbors == 3)
+		newScreen->SetPixel('X', position);
+	else
+		newScreen->SetPixel(screen->GetPixel(position), position);
+}
+
+//---------------------------------------------------------------------------------
+
+//ClassicOffSetPosition Function 
+//screenSize: is a constant reference to a Vector 2D that represents the size of the current Bacteria Screen
+//position: is a constant reference to a Vector 2D that represents the current position in the bacteria Screen
+//offSet: is a constant reference to a Vector 2D that represents the offset from the current position in the bacteria screen
+Vector2D* GameOfLifeBoundaries::ClassicOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet){
+	return new Vector2D(position + offSet);
+}
+
+//---------------------------------------------------------------------------------
+
+//Computes the OffSet Position for the Doughnut Mode
+//screenSize: is a constant reference to a Vector 2D that represents the size of the current Bacteria Screen
+//position: is a constant reference to a Vector 2D that represents the current position in the bacteria Screen
+//offSet: is a constant reference to a Vector 2D that represents the offset from the current position in the bacteria screen
+Vector2D* GameOfLifeBoundaries::DoughnutOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet){
+	
+	Vector2D *offSetPosition = new Vector2D(position + offSet);
+
+	//adjust the offSet to account for a leftwards doughnut movement
+	if(offSetPosition->x < 0)
+		offSetPosition->x += screenSize.x;
+	if(offSetPosition->y < 0) 
+		offSetPosition->y += screenSize.y;
+	
+	//apply the modulus operator to ensure that doughnut wrapping occurs for the right side 
+	offSetPosition->x = int(offSetPosition->x) % int(screenSize.x);
+	offSetPosition->y = int(offSetPosition->y) % int(screenSize.y);
+	
+	return offSetPosition;	
 }

@@ -13,6 +13,16 @@ UserInput::UserInput(){}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//Pause Function
+//Will pause program execution until the user presses enter
+//msg: String message to display to the user
+void UserInput::Pause(string msg){
+	cout << msg << endl;
+	cin.get();
+}
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 //Public Methods Defined Here
 
 /*GetBool Function 

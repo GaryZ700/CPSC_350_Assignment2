@@ -68,10 +68,7 @@ void Screen::Update(string data){
 	Vector2D dataPosition;
 	char pixel;
 	char dataChar;
-	cout << "data: " << endl << data << endl;
-	cout << data.size() << endl;
-	cout << endl << "Building Screen" << endl;
-//	cout << "starting vector: " << dataPosition.ToString() << endl;
+
 	//loop over all positions within the screen and replace with either data from the data string
 	//or with the bg char	
 	for(int y=0; y<size.y; ++y){
@@ -84,7 +81,6 @@ void Screen::Update(string data){
 			if(data.size() > dataPosition.x){
 		
 				dataChar = data[dataPosition.x];
-//		 		cout << "dataChar :" << dataChar << endl;				
 
 				//if the newline character is found
 				//then move the dataposition up a line in the display 
@@ -97,18 +93,14 @@ void Screen::Update(string data){
 				if(y==int(dataPosition.y)){
 					pixel = dataChar;
 					dataPosition.x++;
-//					cout << "put pixel" << dataPosition.x << endl;
 				}
 			}
 
 			screenArray[x][y] = pixel;
 			cout << pixel;		
-//			cout << (dataPosition).ToString() << y << endl;	
 		}
 		cout << endl;
-		//cout << "Y: " << y << ", Ydata: " << dataPosition.y << endl;
 	}
-	cout << "Screen Construction Completed" << endl;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

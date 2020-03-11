@@ -7,6 +7,7 @@
 */
 
 #include <vector>
+#include "user_input.h"
 #include "screen.h"
 #include "os_methods.h"
 #include "game_of_life_constants.h"
@@ -26,16 +27,16 @@ class GameOfLifeSimulation{
 	private:
 		void OutputData();		
 		bool IsStable();
-		int CantorPairingFunction(int x, int y);		
 		
 		int generation;	
 		Screen *bacteriaScreen;
 		void (*boundaryLogic)(Screen*&);
 		kOutputMode output;
 				
-
 		//is a an array containing two vectors
 		//one vector is used to store a complete history
 		//while the second vector is used to store aa possible pattern that is identified	
 		vector<string> *history;
+
+		UserInput input;
 };

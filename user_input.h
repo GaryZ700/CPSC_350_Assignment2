@@ -22,6 +22,8 @@ class UserInput{
 
 	public:
 		UserInput();
+
+		void Pause(string msg="Press Enter to Continue");
 		bool GetBool(string msg="Please choose an option: ", string trueOption="True", string falseOption="False", string errorMsg="Please enter only '1' or '2' to choose an option.");
 		int GetInt(string msg="Please enter an integer: ", string error_msg = "Warning!! Please enter an Integer: ", int min=numeric_limits<int>::min(), int max=numeric_limits<int>::max(), string tooSmallError="The inputted integer was too small, please input a larger integer: ", string tooLargeError="The inputted integer was too large, please input a smaller number: ");
 	   	double GetDouble(string msg="Please enter a decimal number: ", string errorMsg="Warning!! Please enter a valid number: ", double min=-numeric_limits<double>::max(), double max=numeric_limits<double>::max(), string tooSmallError="Your number is too small, please enter a larger number: ", string tooLargeError="Your number is large, please enter a smaller number: "); 
