@@ -33,7 +33,7 @@ class GameOfLifeSimulation{
 		bool IsStable();
 		
 		int generation;	
-		int fileGeneration;
+		int fileGenerationMax;
 		fstream outputFile;
 		Screen *bacteriaScreen;
 		void (*boundaryLogic)(Screen*&);

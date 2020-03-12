@@ -97,9 +97,7 @@ void Screen::Update(string data){
 			}
 
 			screenArray[x][y] = pixel;
-			cout << pixel;		
 		}
-		cout << endl;
 	}
 }
 
@@ -118,7 +116,10 @@ void Screen::SetPixel(char pixel, int x, int y){
 //pixel: char that is to be input into the screen
 //position: reference to a constant vector that represents the position where the pixel is to be inserted
 void Screen::SetPixel(char pixel, const Vector2D &vector){
-	screenArray[int(vector.x)][int(vector.y)] = pixel;
+	if(vector >= Vector2D::kZero && vector <= size)
+		screenArray[int(vector.x)][int(vector.y)] = pixel;
+	else
+		cout << "Warning!! Setting Pixel that does not exist!" << endl;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -139,6 +140,7 @@ char Screen::GetPixel(const Vector2D &vector){
 		return screenArray[int(vector.x)][int(vector.y)];
 	else {
 		cout << "Warning!! Accessing Pixel that does not exist!" << endl;
+		cout << vector.ToString() << endl;
 		return ' ';	
 	}
 }

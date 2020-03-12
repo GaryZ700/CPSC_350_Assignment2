@@ -25,8 +25,8 @@ GameOfLife::GameOfLife(){
 
 	//Set up the Output Mode for the Simulation
  	outputMenu.AddText("Please choose one of the following output options. \n\n");
-	outputMenu.AddOption("1. Display Output", "1");
-	outputMenu.AddOption("2. Display Output with a Pause", "2");
+	outputMenu.AddOption("1. Display Output with a Pause", "1");
+	outputMenu.AddOption("2. Display Output, but Press Enter to Continue", "2");
 	outputMenu.AddOption("3. Send Output to a File", "3");	
 }
 

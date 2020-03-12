@@ -26,15 +26,8 @@ GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundar
 
 	//Open the Output File
 	if(output == FILEOUT){
-
-		string fileName;
-		cout << kOutputFileName << endl;
-		getline(cin, fileName);
-		
-		this->outputFile.open(fileName, ios::out);	
-		
-		cout << kFileOutputGenerations << endl;
-		cin >> fileGeneration;
+		this->outputFile = this->input.GetFile(kOutputFileName, kOutputFileError, ios::out);  
+		this->fileGenerationMax = input.GetInt(kFileOutputGenerations, kFileOutputGenerationsError, 1); 
 	}
 }
 
@@ -58,6 +51,9 @@ void GameOfLifeSimulation::Simulate(){
 		boundaryLogic(bacteriaScreen);	
 		++generation;		
 	}
+
+	//show the last updated generation
+	OutputData();
 }
 
 //---------------------------------------------------------------------------------
@@ -83,7 +79,7 @@ void GameOfLifeSimulation::OutputData(){
 			if(outputFile.is_open())
 		        	outputFile << outputString;	
 			else
-				cout << "Warning File Write Error!" << endl;
+				cout << kOutputFileWriteError << endl;
 			break;	
 	}
 }
@@ -98,10 +94,14 @@ bool GameOfLifeSimulation::IsStable(){
 	//check if all cells have died
 	//and if the file output mode is selected, that the max amount of outputted generations has 
 	//not been crossed
-	if(history->at(size).find('X') == string::npos ||
-	   (output == FILEOUT && generation > fileGeneration)
-	)
+	if(history->at(size).find('X') == string::npos){
+		input.Pause(kGenerationDied);
 		return true;
+	}
+	if(output == FILEOUT && generation > fileGenerationMax){
+		input.Pause(kGenerationMaxReached);
+		return true;
+	}
 
 	//check whether the current history shows any stabilizationd
 	//check if the current history has data that is a multiple of two, to ensure 
@@ -119,6 +119,7 @@ bool GameOfLifeSimulation::IsStable(){
 					
 				}
 				
+				input.Pause(kSimulationStabilized);
 				return true;	
 
 				nextPattern:;

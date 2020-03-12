@@ -57,12 +57,12 @@ void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const V
 			//skip iteration if position is not being offset 
 			if(x == 0 && y == 0)
 				continue;				
-			
+		
 			Vector2D *offSetPosition = getOffSetPosition(size, position, Vector2D(x, y));
-
+		
 			if(screen->GetPixel(offSetPosition) == 'X')	
 				++neighbors;
-			
+		
 			delete offSetPosition;
 		}
 	}
@@ -107,8 +107,6 @@ void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScree
 	if(position.y != screen->GetSize().y-1)
 		offSets.push_back(Vector2D::kUp);
 	
-	cout << position.ToString() << endl;
-
 	for(int i=0; i<offSets.size(); ++i){
 		for(int j=0; j<offSets.size(); ++j){
 			
@@ -233,34 +231,23 @@ Vector2D* GameOfLifeBoundaries::DoughnutOffSetPosition(const Vector2D &screenSiz
 Vector2D* GameOfLifeBoundaries::MirrorOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet){
 	
 	Vector2D offSetPosition(position + offSet); 
-
+	
 	//if position is along the y-axis, then shift the position by 
 	//removing the x shift which would be invalid since it is outside 
 	//the screen area, but by removing the x-shift, the cell that would
-	//be reflected is checked instead of the reflection itself 
+	//be reflected is checked instead of the reflection itsel
 	if(offSetPosition.x < 0 || offSetPosition.x > screenSize.x - 1){
-		return new Vector2D(
-			offSetPosition.x - offSet.x, 
-			offSetPosition.y
-		);
+		offSetPosition.x -= offSet.x;
 	}
 
 	//Same argument as above if statment follows for this if, the only difference 
 	//is that x-axis is inverted with the y-axis and vice versa
-	else if(offSetPosition.y < 0 || offSetPosition.y > screenSize.y - 1){
-		return new Vector2D(
-			offSetPosition.x, 
-			offSetPosition.y - offSet.y	
-		);
+	if(offSetPosition.y < 0 || offSetPosition.y > screenSize.y - 1){
+		offSetPosition.y -= offSet.y;	
 	}
 
-	//in the case where the position is a corner, then return the current position
-	//as the offSetPosition since corner reflections are all based on the corner cell 	
-	else if(offSetPosition.x == 0 || offSetPosition.x == screenSize.x - 1)
-		return new Vector2D(position);	
-
-	//in the case where dealing with an a position that 
-	//is not on the border, then return the regular offSetPosition
-	//since no modification for mirror mode has to be done
+	//in the case where dealing with an offSet position that 
+	//is not on the border, the original offSetPosition is returned
+	//since no modifications due to mirror mode need to be amde
 	return new Vector2D(offSetPosition);
 }
