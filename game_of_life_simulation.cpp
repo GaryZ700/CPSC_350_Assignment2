@@ -51,9 +51,6 @@ void GameOfLifeSimulation::Simulate(){
 		boundaryLogic(bacteriaScreen);	
 		++generation;		
 	}
-
-	//show the last updated generation
-	OutputData();
 }
 
 //---------------------------------------------------------------------------------
@@ -95,10 +92,12 @@ bool GameOfLifeSimulation::IsStable(){
 	//and if the file output mode is selected, that the max amount of outputted generations has 
 	//not been crossed
 	if(history->at(size).find('X') == string::npos){
+		OutputData();
 		input.Pause(kGenerationDied);
 		return true;
 	}
 	if(output == FILEOUT && generation > fileGenerationMax){
+		OutputData();
 		input.Pause(kGenerationMaxReached);
 		return true;
 	}
@@ -119,6 +118,7 @@ bool GameOfLifeSimulation::IsStable(){
 					
 				}
 				
+				OutputData();	
 				input.Pause(kSimulationStabilized);
 				return true;	
 

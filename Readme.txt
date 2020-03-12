@@ -29,6 +29,7 @@ Identifiying Information:
 	Software will mistakenly not be able to identify stable Game of Life patterns if they require 50 or more cycles before the cycle repeats. 
 	Testing was completed to the best abillities and knowledge of the programmer, but run-time errors may exist in certain input situations that were not tested. 
 	During file reading/writing, hardware failure or other multiple software reading/writing to the same file may cause program to crash.	
+	Running software for very large simulations, of total computation of over 6,000,000 bacteria will cause the simulation to be "killed". The amount of bacteria computed can be determined by getting the area of the bacteria screen, and then multiplying the area by the number of generations that are created. 
 
 4. References used to complete the assignment:
 	Class Lectures/Textbook
@@ -66,4 +67,4 @@ Identifiying Information:
 
 5. Instructions for running the assignment
 	1.) Run "make"
-	2.) Run "./assignment2.exe" with a command line paramter of the DNA file to analyze.
+	2.) Run "./assignment2.exe"

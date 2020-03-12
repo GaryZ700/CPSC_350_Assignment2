@@ -47,6 +47,8 @@ bool UserInput::GetBool(string msg, string trueOption, string falseOption, strin
 		cin >> input;
 		cout << input << endl;
 	}
+
+	CinUpdate();
 	
 	if(input == 1)
 		return true;
@@ -87,6 +89,8 @@ int UserInput::GetInt(string msg, string errorMsg, int min, int max, string tooS
 		cin >> input;
 	};
 
+	CinUpdate();
+
 	return input;
 }
 
@@ -119,6 +123,8 @@ double UserInput::GetDouble(string msg, string errorMsg, double min, double max,
 		CinUpdate();
 		cin >> input;
 	};
+
+	CinUpdate();
 
 	return input;
 }

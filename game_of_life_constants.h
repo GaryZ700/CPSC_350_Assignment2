@@ -43,8 +43,8 @@ const string kOutputFileError = "\nThere was an error opening the provided file 
 const string kFileOutputGenerationsError = "\nPlease enter a valid integer greater than 0.";
 const string kOutputFileWriteError = "\nWarning! Output file could not be written to!";
 const string kFileOutputGenerations = "Please enter the maximum amount of generations that should be outputted to the output file.\nPlease note that if the system stabilizes before the maximum amount of generations have been reached then file output will cease.\n";
-const string kSimulationStabilized = "\nThe simulation has stabilized into a repeating pattern. Press enter to quit.\n";
-const string kGenerationMaxReached = "\nThe max amount of bacteria generations has been written to the output file. Press enter to quit.\n";
-const string kGenerationDied = "\nThe simulation has ended due to all bacteria dying off. Press enter to quit.\n";
+const string kSimulationStabilized = "\nThe simulation has stabilized into a repeating pattern. Press enter to quit.";
+const string kGenerationMaxReached = "\nThe max amount of bacteria generations has been written to the output file. Press enter to quit.";
+const string kGenerationDied = "\nThe simulation has ended due to all bacteria dying off. Press enter to quit.";
 
 #endif //_GAME_OF_LIFE_CONSTANTS_H_
