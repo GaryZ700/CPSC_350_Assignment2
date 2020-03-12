@@ -36,71 +36,76 @@ void GameOfLifeBoundaries::DoughnutBoundary(Screen *&screen){
 
 //---------------------------------------------------------------------------------
 
-//Inner Logic to be used for the inner squares of the bacteria screen
+//Inner Logic to be used for the non-border computations of the bacteria screen
 //screen: pointer to starting generation screen
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
-//getOffSetPosition: pointer to a function that takes both the current position vector and the offset vector to generate the final offset position
+//getOffSetPosition: pointer to a function that takes the initial screen, the current position vector and 
+	//the offset vector to generate the final offset position, this is used to create different
+	//boundary conditions
 void GameOfLifeBoundaries::InnerLogic(Screen *screen, Screen *newScreen, const Vector2D &position, Vector2D* (*getOffSetPosition)(const Vector2D&, const Vector2D&, const Vector2D&)){
 
 	int neighbors = 0;	
 	Vector2D size = screen->GetSize();
 
+	//loop from -1 to 1 in order to create vector combinations 
+	//that offset the position of the current position to all 
+	//position surronding the current position
 	for(int y=-1; y<2; ++y){
 		for(int x=-1; x<2; ++x){
 
+			//skip iteration if position is not being offset 
 			if(x == 0 && y == 0)
 				continue;				
 			
 			Vector2D *offSetPosition = getOffSetPosition(size, position, Vector2D(x, y));
 
-			cout << "Get Pixel" << endl;
-			cout << offSetPosition->ToString() << endl;
 			if(screen->GetPixel(offSetPosition) == 'X')	
 				++neighbors;
 			
-			cout << "Before Delete" << endl;
 			delete offSetPosition;
-			cout << "After Delete" << endl;
 		}
 	}
 
+	//logic used to determine if a cell will live or die in the current position
 	CoreLogic(screen, newScreen, position, neighbors);
 }
 
 //---------------------------------------------------------------------------------
 
-//Doughnut Boundary Logic, Classic Boundary Logic to be used for the Game of Life
+//Classic Boundary Logic to be used for the Game of Life
 //screen: pointer to starting generation screen
 //newScreen: pointer to new generation screen
 //position: position in the screen where an update to the generation is to be made
 void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScreen, const Vector2D &position){
 	
+	//Central Idea of this algorithem is that for each position
+	//in the boundary, all possible vector offsets to check a valid 
+	//position where a neighbor exists are generated, and then
+	//linearly combined in order to check Class Game of Life
+	//border cells
+
 	int neighbors = 0;
 	int offSetIndex = 0;
 	vector<Vector2D> offSets;
 
 	offSets.push_back(Vector2D::kZero);
 
-	//cout << "!!!!!!!!!!!!!" << endl;
-	
 	//add in the appropriate vectors to check all of the surrounding neighbors
-	if(position.x != 0){
-	//	cout << "Left" << endl; 
+	//logic works by checking what offsets are possible given what the vector value is NOT
+	//for example, if x!=0, then there are spaces to check to the left of the current position, 
+	//meaning that a left vector can be added to the list of offsets to check
+	if(position.x != 0)
 		offSets.push_back(Vector2D::kLeft);
-	}
-	if(position.x != screen->GetSize().x-1){
-	//	cout << "Right" << endl;
+
+	if(position.x != screen->GetSize().x-1)
 		offSets.push_back(Vector2D::kRight);
-	}
-	if(position.y != 0){
-	//	cout << "Down" << endl;
+
+	if(position.y != 0)
 		offSets.push_back(Vector2D::kDown);
-	}
-	if(position.y != screen->GetSize().y-1){
-	//	cout << "Up" << endl;
+
+	if(position.y != screen->GetSize().y-1)
 		offSets.push_back(Vector2D::kUp);
-	}
 	
 	cout << position.ToString() << endl;
 
@@ -111,22 +116,12 @@ void GameOfLifeBoundaries::ClassicBoundaryLogic(Screen *screen, Screen *newScree
 
 			if(offSet == Vector2D::kZero || abs(offSet.x) == 2 || abs(offSet.y) == 2)
 				continue;
-			if(position == Vector2D(3, 9)){	
-				/*cout << "###########position with off set###########" << endl;	
-				cout << (position + offSet).ToString() << endl;
-				cout << screen->GetPixel(position + offSet) << endl;*/
-			}
 
 			if(screen->GetPixel(position + offSet) == 'X')	
 				neighbors += 1;			
 		}
 	}
 	
-	/*cout << "!!!!!!!!!!!!!" << endl;
-	cout << neighbors << endl;
-	cout << neighbors / 2 << endl;
-	cout << "TESTTESTTEST" << endl;*/
-
 	//divide neighbors by two since for loop overcounts each neighbor twice
 	CoreLogic(screen, newScreen, position, neighbors/2);
 }
@@ -172,13 +167,14 @@ void GameOfLifeBoundaries::BuildNextGeneration(Screen *&screen, void (*boundaryL
 		}
 	}
 
+	//deletes the old screen reference and moves the new screen pointer to the original screen 
 	delete screen;
 	screen = newScreen;
 }
 
 //---------------------------------------------------------------------------------
 
-//Core Logic for the Game of Life Simulation
+//Core Logic for the Game of Life Simulation used to determine if bacteria live or die
 //screen: Screen pointer where update is to be made based on the logic
 //position: reference to Vector2D of position where the update is to be made
 //neighbors: int that represents the number of neighbors the cell in question has
@@ -213,48 +209,58 @@ Vector2D* GameOfLifeBoundaries::DoughnutOffSetPosition(const Vector2D &screenSiz
 	
 	Vector2D *offSetPosition = new Vector2D(position + offSet);
 
-	//adjust the offSet to account for a leftwards doughnut movement
+	//adjust the offSet to account for a leftwards doughnut movement by add in the approriate size componenet
+	//adjust the offSet to account for a rightwards doughnut movement by using the modulo operator
 	if(offSetPosition->x < 0)
 		offSetPosition->x += screenSize.x;
+	else
+		offSetPosition->x = int(offSetPosition->x) % int(screenSize.x);
+	
 	if(offSetPosition->y < 0) 
 		offSetPosition->y += screenSize.y;
-	
-	//apply the modulus operator to ensure that doughnut wrapping occurs for the right side 
-	offSetPosition->x = int(offSetPosition->x) % int(screenSize.x);
-	offSetPosition->y = int(offSetPosition->y) % int(screenSize.y);
-	
+	else	
+		offSetPosition->y = int(offSetPosition->y) % int(screenSize.y);
+		
 	return offSetPosition;	
 }
 
 //---------------------------------------------------------------------------------
 
+//Computes the OffSet Position for the Mirror Mode
+//screenSize: is a constant reference to a Vector 2D that represents the size of the current Bacteria Screen
+//position: is a constant reference to a Vector 2D that represents the current position in the bacteria Screen
+//offSet: is a constant reference to a Vector 2D that represents the offset from the current position in the bacteria screen
 Vector2D* GameOfLifeBoundaries::MirrorOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet){
-
-	cout << position.ToString() << endl;
-	cout << "Enter Mirror Off Set Position" << endl;
 	
 	Vector2D offSetPosition(position + offSet); 
-	cout << offSetPosition.ToString() << endl;	
 
+	//if position is along the y-axis, then shift the position by 
+	//removing the x shift which would be invalid since it is outside 
+	//the screen area, but by removing the x-shift, the cell that would
+	//be reflected is checked instead of the reflection itself 
 	if(offSetPosition.x < 0 || offSetPosition.x > screenSize.x - 1){
-		cout << "X Entrance" << endl;
 		return new Vector2D(
 			offSetPosition.x - offSet.x, 
 			offSetPosition.y
 		);
 	}
 
+	//Same argument as above if statment follows for this if, the only difference 
+	//is that x-axis is inverted with the y-axis and vice versa
 	else if(offSetPosition.y < 0 || offSetPosition.y > screenSize.y - 1){
-		cout << "Y Entrance" << endl;
 		return new Vector2D(
 			offSetPosition.x, 
 			offSetPosition.y - offSet.y	
 		);
 	}
-	
+
+	//in the case where the position is a corner, then return the current position
+	//as the offSetPosition since corner reflections are all based on the corner cell 	
 	else if(offSetPosition.x == 0 || offSetPosition.x == screenSize.x - 1)
 		return new Vector2D(position);	
 
+	//in the case where dealing with an a position that 
+	//is not on the border, then return the regular offSetPosition
+	//since no modification for mirror mode has to be done
 	return new Vector2D(offSetPosition);
-
-	}
+}

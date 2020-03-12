@@ -23,8 +23,6 @@ void UserInput::Pause(string msg){
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//Public Methods Defined Here
-
 /*GetBool Function 
   return a bool based on user input
   msg: String to prompt the user with
@@ -191,5 +189,3 @@ void UserInput::CinUpdate(){
 	cin.clear();
 	cin.ignore(numeric_limits<int>::max(), '\n');
 }
-
-////////////////////////////////////////////////////////////////////////////////////

@@ -33,4 +33,4 @@ class GameOfLifeBoundaries{
 		static Vector2D* MirrorOffSetPosition(const Vector2D &screenSize, const Vector2D &position, const Vector2D &offSet);
 };
 
-#endif
+#endif //_GAME_OF_LIFE_BOUNDARIES_H_

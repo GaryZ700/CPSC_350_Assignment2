@@ -24,12 +24,14 @@ class GameOfLife{
 
 	public:
 		GameOfLife();
-		void MainMenu();
-		
+		void MainMenu();	
+	
 	private:
-		Screen* LoadFile();
 		Screen* RandomConfiguration();
-		
+		void BuildRandomConfiguration(int insertionAmount, string &data, const string &bg, const string &insertionChar, const Vector2D &size);
+		Screen* LoadFile();
+		void ParseFileData(int size[2], string &data);
+	
 		Menu mainMenu;
 		Menu boundaryMenu;
 		Menu outputMenu;

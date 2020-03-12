@@ -10,7 +10,11 @@
 
 using namespace std;
 
-GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*&), kOutputMode output){
+//Constructor for the Simulation Class
+//configuration: pointer to the initial configuration for the Game of Life Simulation
+//boundaryLogic: pointer to a function that takes in the initial configuration screen to be able to compute the boundary logic for the screen
+//output: OutputMode enum used to determine how the simulation should output the data 
+GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundaryLogic)(Screen*&), kOutputMode output){	
 	this->generation = 0;
 
 	this->bacteriaScreen = configuration;
@@ -20,6 +24,7 @@ GameOfLifeSimulation::GameOfLifeSimulation(Screen *configuration, void (*boundar
 	this->history = new vector<string>();
 	this->history->clear();
 
+	//Open the Output File
 	if(output == FILEOUT){
 
 		string fileName;
@@ -52,7 +57,6 @@ void GameOfLifeSimulation::Simulate(){
 		OutputData();
 		boundaryLogic(bacteriaScreen);	
 		++generation;		
-		cout << bacteriaScreen->ToString() << endl;			
 	}
 }
 
@@ -61,7 +65,7 @@ void GameOfLifeSimulation::Simulate(){
 //Function to Output Data to the correct output form
 void GameOfLifeSimulation::OutputData(){
 
-	//print out the current generation to the screen
+	//Prepare Bacteria Generation Data to print out to the screen
 	string outputString = "";
 	outputString += "Generation: " + to_string(generation) + "\n\n";
 	outputString +=  bacteriaScreen->ToString() + "\n\n";
@@ -76,12 +80,10 @@ void GameOfLifeSimulation::OutputData(){
 			input.Pause();		
 			break;
 		case FILEOUT:
-			if(outputFile.is_open()){
-		        	outputFile << outputString;
-				cout << "Wrote to File" << endl;
-			}	
+			if(outputFile.is_open())
+		        	outputFile << outputString;	
 			else
-				cout << "Warning File is not open" << endl;
+				cout << "Warning File Write Error!" << endl;
 			break;	
 	}
 }
@@ -102,7 +104,8 @@ bool GameOfLifeSimulation::IsStable(){
 		return true;
 
 	//check whether the current history shows any stabilizationd
-	//check if the current history has data that is a multiple of two
+	//check if the current history has data that is a multiple of two, to ensure 
+	//there is enough data 
 	if(size%2 == 0){
 
 		//check all current possible patterns that are possible to discern from the given data
@@ -111,9 +114,9 @@ bool GameOfLifeSimulation::IsStable(){
 				
 				//get the pattern of size i
 				for(int k=0; k<=j; ++k){
-					if(history->at(size - k) != history->at( size - i - k )){
+					if(history->at(size - k) != history->at( size - i - k ))
 						goto nextPattern;
-					}
+					
 				}
 				
 				return true;	

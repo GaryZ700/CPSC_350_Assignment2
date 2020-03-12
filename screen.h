@@ -40,4 +40,4 @@ class Screen{
 		char **screenArray;	
 };
 
-#endif
+#endif //_SCREEN_H_

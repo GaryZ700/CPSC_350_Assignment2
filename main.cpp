@@ -16,7 +16,5 @@ int main(int argc, char** argv){
 
 	GOL.MainMenu();
 
-	//GOLSim.Simulate();
-
 	return 0;
 }

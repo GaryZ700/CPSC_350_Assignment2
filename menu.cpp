@@ -110,5 +110,3 @@ string Menu::ParseOption(string promptText, string errMsg){
 		getline(cin, userInput);	
 	}	
 }
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

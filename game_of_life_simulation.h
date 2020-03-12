@@ -16,6 +16,9 @@
 
 using namespace std;
 
+#ifndef _GAME_OF_LIFE_SIMULATION_H_
+#define _GAME_OF_LIFE_SIMULATION_H_
+
 //Game Of Life Simuation Class, is responsible for the actual execution of the game of life simulation
 class GameOfLifeSimulation{
 	
@@ -43,3 +46,5 @@ class GameOfLifeSimulation{
 
 		UserInput input;
 };
+
+#endif //_GAME_OF_LIFE_SIMULATOR_H_

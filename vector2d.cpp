@@ -134,7 +134,7 @@ Vector2D Vector2D::operator/(double constant) const{
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//Preincrement Overload
+//Post Increment Overload
 //Increments x, and then y, to simulate the use of a double for loop to generate a 2x2 Array
 Vector2D Vector2D::operator++(){
 	
